@@ -83,9 +83,6 @@ namespace HealthBeatII.ViewModels
 
         private bool ValidateSave()
         {
-            // 공백이 있을 경우, 채울 수 있도록 메시지 추가해야 할 듯.
-
-
             return !String.IsNullOrWhiteSpace(name)
                 && !String.IsNullOrWhiteSpace(part)
                 && !String.IsNullOrWhiteSpace(description);
@@ -106,8 +103,13 @@ namespace HealthBeatII.ViewModels
 
         private async void OnDelete()
         {
-            // 삭제할까요? 메시지 추가해야 할 듯.
+            // 삭제할까요? 메시지 추가 필요.            
+            // Page 에서 DisplayAlert 를 호출하면됨.
+            bool answer = await Shell.Current.CurrentPage.DisplayAlert("확인", "삭제하시겠습니까?", "확인", "취소");
+            //Debug.WriteLine("Answer: " + answer);
 
+            if (answer == false)
+                return;
 
             HistoryDatabase database = await HistoryDatabase.Instance;
             await database.DeletePracticeItemAsync(thisItem);
