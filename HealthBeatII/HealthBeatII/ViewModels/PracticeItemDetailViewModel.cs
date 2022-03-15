@@ -10,7 +10,7 @@ using HealthBeatII.Views;
 namespace HealthBeatII.ViewModels
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
-    class PracticeItemDetailViewModel : BaseViewModel
+    public class PracticeItemDetailViewModel : BaseViewModel
     {
         private string itemId;
         private string text;
@@ -40,6 +40,11 @@ namespace HealthBeatII.ViewModels
                 itemId = value;
                 LoadItemId(value);
             }
+        }
+
+        public PracticeItemDetailViewModel()
+        {
+            Title = "Detailed Practice";
         }
 
         public async void LoadItemId(string itemId)
