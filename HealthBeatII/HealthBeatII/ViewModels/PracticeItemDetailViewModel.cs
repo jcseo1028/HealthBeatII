@@ -13,14 +13,19 @@ namespace HealthBeatII.ViewModels
     public class PracticeItemDetailViewModel : BaseViewModel
     {
         private string itemId;
-        private string text;
+        private string name;
+        private string part;
         private string description;
-        public string Id { get; set; }
-
-        public string Text
+        public string Name
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => name;
+            set => SetProperty(ref name, value);
+        }
+
+        public string Part
+        {
+            get => part;
+            set => SetProperty(ref part, value);
         }
 
         public string Description
@@ -28,6 +33,11 @@ namespace HealthBeatII.ViewModels
             get => description;
             set => SetProperty(ref description, value);
         }
+
+        public Command UpdateCommand { get; }
+        public Command DeleteCommand { get; }
+
+        private PracticeItem thisItem;
 
         public string ItemId
         {
@@ -45,6 +55,11 @@ namespace HealthBeatII.ViewModels
         public PracticeItemDetailViewModel()
         {
             Title = "Detailed Practice";
+
+            UpdateCommand = new Command(OnUpdate, ValidateSave);
+            DeleteCommand = new Command(OnDelete);
+            this.PropertyChanged +=
+                (_, __) => UpdateCommand.ChangeCanExecute();
         }
 
         public async void LoadItemId(string itemId)
@@ -54,16 +69,51 @@ namespace HealthBeatII.ViewModels
                 HistoryDatabase database = await HistoryDatabase.Instance;
 
                 //var item = await database.GetHistoryItemAsync(Convert.ToInt32(itemId));
-                var item = await database.GetPracticeItemAsync(Convert.ToInt32(itemId));
+                thisItem = await database.GetPracticeItemAsync(Convert.ToInt32(itemId));
 
-                Id = item.Id.ToString();
-                Text = item.Name;
-                Description = item.Description;
+                Name = thisItem.Name;
+                Part = thisItem.Part;
+                Description = thisItem.Description;
             }
             catch (Exception)
             {
                 Debug.WriteLine("Failed to Load Item");
             }
+        }
+
+        private bool ValidateSave()
+        {
+            // 공백이 있을 경우, 채울 수 있도록 메시지 추가해야 할 듯.
+
+
+            return !String.IsNullOrWhiteSpace(name)
+                && !String.IsNullOrWhiteSpace(part)
+                && !String.IsNullOrWhiteSpace(description);
+        }
+
+        private async void OnUpdate()
+        {
+            thisItem.Name = Name;
+            thisItem.Part = Part;
+            thisItem.Description = Description;
+
+            HistoryDatabase database = await HistoryDatabase.Instance;
+            await database.SavePracticeItemAsync(thisItem);
+
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..");
+        }
+
+        private async void OnDelete()
+        {
+            // 삭제할까요? 메시지 추가해야 할 듯.
+
+
+            HistoryDatabase database = await HistoryDatabase.Instance;
+            await database.DeletePracticeItemAsync(thisItem);
+
+            // This will pop the current page off the navigation stack
+            await Shell.Current.GoToAsync("..");
         }
     }
 }

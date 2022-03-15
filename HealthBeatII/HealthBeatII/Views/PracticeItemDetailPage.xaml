@@ -8,12 +8,18 @@
              Title="{Binding Title}">
 
     <ContentPage.Content>
-        <StackLayout Spacing="20" Padding="15">
-            <Label Text="Text:" FontSize="Medium" TextColor="RED" />
-            <Label Text="{Binding Text}" FontSize="Small" TextColor="RED"/>
-            <Label Text="Description:" FontSize="Medium" TextColor="BLUE" />
-            <Label Text="{Binding Description}" FontSize="Small" TextColor="BLUE"/>
-         </StackLayout>
+        <StackLayout Spacing="3" Padding="15">
+            <Label Text="Name" FontSize="Medium" />
+            <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
+            <Label Text="Part" FontSize="Medium" />
+            <Entry Text="{Binding Part, Mode=TwoWay}" FontSize="Medium" />
+            <Label Text="Description" FontSize="Medium" />
+            <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Update" Command="{Binding UpdateCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Button Text="Delete" Command="{Binding DeleteCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
     
 </ContentPage>
