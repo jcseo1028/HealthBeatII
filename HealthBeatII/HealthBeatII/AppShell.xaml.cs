@@ -16,6 +16,7 @@ namespace HealthBeatII
 
             // "Unable to figure out route for" 에러 시, 페이지 추가 시 아래 Route 처리 해줘야 함.
             Routing.RegisterRoute(nameof(NewPracticeItemPage), typeof(NewPracticeItemPage));
+            Routing.RegisterRoute(nameof(PracticeItemDetailPage), typeof(PracticeItemDetailPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

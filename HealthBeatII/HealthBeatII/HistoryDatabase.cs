@@ -37,6 +37,11 @@ namespace HealthBeatII
             return Database.Table<PracticeItem>().ToListAsync();
         }
 
+        public Task<PracticeItem> GetPracticeItemAsync(int id)
+        {
+            return Database.Table<PracticeItem>().Where(i => i.Id == id).FirstOrDefaultAsync();
+        }
+
         public Task<List<CombinedPracticeItem>> GetCombinedPracticeItemsAsync()
         {
             return Database.Table<CombinedPracticeItem>().ToListAsync();

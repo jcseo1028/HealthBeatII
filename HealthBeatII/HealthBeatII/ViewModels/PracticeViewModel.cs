@@ -97,7 +97,7 @@ namespace HealthBeatII.ViewModels
 
         async void OnItemSelected(PracticeItem item)
         {
-            return;
+            //return;
 
             if (item == null)
                 return;
@@ -105,7 +105,9 @@ namespace HealthBeatII.ViewModels
             // This will push the ItemDetailPage onto the navigation stack
 
             // ViewModel 추가 필요. PracticeItemDetailViewModel
-            // await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            //await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(PracticeItemDetailPage)}?{nameof(PracticeItemDetailViewModel.ItemId)}={item.Id.ToString()}");
+           
         }
     }
 }
