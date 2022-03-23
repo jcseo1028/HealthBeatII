@@ -1,12 +1,115 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HealthBeatII.Views.NewCombinedItemPage">
+             x:Class="HealthBeatII.Views.NewCombinedItemPage"
+             Shell.PresentationMode="ModalAnimated"
+             Title="New Combined Practice Item"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:local="clr-namespace:HealthBeatII.ViewModels"  
+             xmlns:model="clr-namespace:HealthBeatII.Models"  
+             ios:Page.UseSafeArea="true">
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Spacing="3" Padding="15">
+            <Label Text="Name" FontSize="Medium" />
+            <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
+            <Label Text="Description" FontSize="Medium" />
+            <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+            <Label Text="Select Pratice Items" FontSize="Medium" />
+
+            <StackLayout>
+                <!--
+                <Label x:Name="lblTitle" Text="Picker control in Xamarin Forms - UWP and Android Demo" Font="Large" />
+                <Label x:Name="lbldisp"></Label>
+                -->
+
+                <!--
+                기본적인 Picker 는 이렇게.. 리스트 가변적으로 하는 방법은?
+                <Picker x:Name="Countries">
+                    <Picker.Items>
+                        <x:String>India</x:String>
+                        <x:String>United States</x:String>
+                        <x:String>Australia</x:String>
+                        <x:String>Bangladesh</x:String>
+                        <x:String>Canada</x:String>
+                        <x:String>China</x:String>
+                        <x:String>Germany</x:String>
+                        <x:String>Mauritius</x:String>
+                        <x:String>Nepal</x:String>
+                        <x:String>Brazil</x:String>
+                    </Picker.Items>
+                </Picker>
+                
+                <Picker Title="Select a Practice Item"
+                        TitleColor="Red"
+                        ItemsSource="{Binding PracticeItems}"
+                        ItemDisplayBinding="{Binding Name}" />
+                
+                -->
+
+                <!--
+                Title="Select a Practice Item" // Title 은 왜 넣으면 안되지?
+                -->
+                <Picker 
+                        TitleColor="Red"
+                        ItemsSource="{Binding PracticeItems}"
+                        SelectedIndexChanged="Picker_SelectedIndexChanged" 
+                        />
+
+            </StackLayout>
+
+            <!-- 
+                선택된 Practice Item 표시. 
+                Picker가 하나 선택될 때마다 업데이트되어야 함.
+                -->
+            <RefreshView x:DataType="local:NewCombinedItemViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="SelectedPracticeItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:PracticeItem">
+
+                                <Label Text="{Binding Name}" 
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        TextColor="RED"
+                                        FontSize="16" />
+
+                                <Label Text="{Binding Description}" 
+                                        LineBreakMode="NoWrap"
+                                        MaxLines="3"
+                                        Style="{DynamicResource ListItemDetailTextStyle}"
+                                        TextColor="BLUE"
+                                        FontSize="13" />
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:NewCombinedItemViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
+
+            
+
+
+
         </StackLayout>
     </ContentPage.Content>
+
+    
+
 </ContentPage>

@@ -5,7 +5,7 @@
              Title="{Binding Title}"
              xmlns:local="clr-namespace:HealthBeatII.ViewModels"  
              xmlns:model="clr-namespace:HealthBeatII.Models"  
-             x:Name="CombinedPracticePage">
+             x:Name="CombinedPracticeItemPage"> <!-- Content Page Name 과 다른 Name 이어야 함.-->
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
