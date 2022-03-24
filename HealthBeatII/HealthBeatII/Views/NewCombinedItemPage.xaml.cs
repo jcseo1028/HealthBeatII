@@ -13,7 +13,7 @@ using HealthBeatII.ViewModels;
 
 namespace HealthBeatII.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+    //[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NewCombinedItemPage : ContentPage
     {
         public CombinedPracticeItem Item { get; set; }
@@ -24,6 +24,7 @@ namespace HealthBeatII.Views
             InitializeComponent();
 
             BindingContext = _viewModel = new NewCombinedItemViewModel();
+            _viewModel.OnAppearing();
         }
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)

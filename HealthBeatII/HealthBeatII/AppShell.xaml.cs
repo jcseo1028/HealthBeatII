@@ -19,7 +19,9 @@ namespace HealthBeatII
             Routing.RegisterRoute(nameof(PracticeItemDetailPage), typeof(PracticeItemDetailPage));
 
             Routing.RegisterRoute(nameof(NewCombinedItemPage), typeof(NewCombinedItemPage));
-            Routing.RegisterRoute(nameof(CombinedItemDetailPage), typeof(PracticeItemDetailPage));
+            Routing.RegisterRoute(nameof(CombinedItemDetailPage), typeof(CombinedItemDetailPage));
+
+            //System.Diagnostics.Debug.WriteLine(nameof(NewCombinedItemPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

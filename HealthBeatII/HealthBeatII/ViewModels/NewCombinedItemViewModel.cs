@@ -31,25 +31,10 @@ namespace HealthBeatII.ViewModels
         }
 
         private List<string> m_strListPractice;
-        public IList<string> PracticeItems
-        {
-            get
-            {
-                return m_strListPractice;
-            }
-            /*
-             * Picker 에 값이 초기화되는 경우가 있는 거 같음.
-            set
-            {
-                m_strListPractice = value;
-                OnPropertyChanged();
-            }
-            */
-            //set => SetProperty{ ref }
-        }
+        public ObservableCollection<string> PracticeItems;
 
-        private List<string> listSelectedPractice;
-        public IList<string> SelectedPracticeItems
+        private List<PracticeItem> listSelectedPractice;
+        public List<PracticeItem> SelectedPracticeItems
         {
             get
             {
@@ -76,21 +61,25 @@ namespace HealthBeatII.ViewModels
         {
             Title = "New Combined Practice Item";
 
+            listSelectedPractice = new List<PracticeItem>();
             UpdatePracticeItems();
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
 
             SaveCommand = new Command(OnSave, ValidateSave);
             CancelCommand = new Command(OnCancel);
 
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
             ItemTapped = new Command<PracticeItem>(OnItemSelected);
             Items = new ObservableCollection<PracticeItem>();
 
-
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+        }
 
-            listSelectedPractice = new List<string>();
+        public void OnAppearing()
+        {
+            IsBusy = true;
+            //SelectedItem = null;
         }
 
         async void OnItemSelected(PracticeItem item)
@@ -98,38 +87,21 @@ namespace HealthBeatII.ViewModels
             if (item == null)
                 return;
 
-            // This will push the ItemDetailPage onto the navigation stack
-
-            // ViewModel 추가 필요. CombinedItemDetailViewModel
-            //await Shell.Current.GoToAsync($"{nameof(CombinedItemDetailViewModel)}?{nameof(CombinedItemDetailViewModel.ItemId)}={item.Id.ToString()}");
+            // 해당 아이템을 삭제할 것인 지 팝업 후 삭제.
 
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private async Task ExecuteLoadItemsCommand()
         {
             IsBusy = true;
-
-            HistoryDatabase database = await HistoryDatabase.Instance;
-            m_listPractice = await database.GetPracticeItemsAsync();
-
-            //m_listPractice.Reverse();
-
-            //m_listHistory.RemoveAt(2);
-            //m_listHistory.RemoveAt(2);
 
             try
             {
                 Items.Clear();
-                //var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in m_listPractice)
+
+                foreach(var item in listSelectedPractice)
                 {
-                    //Items.Add(item);
-                    /*
-                    item.reserved1 = string.Format("{0} --- BPM : {1:D2}", DateTime.ParseExact(item.StartTime, "yyyyMMddHHmmss", null).ToString("yyyy-MM-dd HH 시 mm 분"), item.BPM);
-                    TimeSpan ts = DateTime.ParseExact(item.EndTime, "yyyyMMddHHmmss", null) - DateTime.ParseExact(item.StartTime, "yyyyMMddHHmmss", null);
-                    item.reserved2 = string.Format("{0:D2} Minutes", (int)ts.TotalMinutes);
                     Items.Add(item);
-                    */
                 }
             }
             catch (Exception ex)
@@ -146,13 +118,20 @@ namespace HealthBeatII.ViewModels
         {
             m_listPractice = new List<PracticeItem>();
             m_strListPractice = new List<string>();
+            PracticeItems = new ObservableCollection<string>();
 
             HistoryDatabase database = await HistoryDatabase.Instance;
             m_listPractice = await database.GetPracticeItemsAsync();
 
+            // View Model 에서 Current Page 의 Control 에 접근하기.
+            Picker pickerTemp = Shell.Current.CurrentPage.FindByName<Picker>("pickerPractice");
+            pickerTemp.Items.Clear();
+
             for (int i = 0; i < m_listPractice.Count; i++)
             {
                 m_strListPractice.Add(m_listPractice[i].Name);
+                pickerTemp.Items.Add(m_listPractice[i].Name);
+                PracticeItems.Add(m_listPractice[i].Name);
             }
         }
 
@@ -183,7 +162,7 @@ namespace HealthBeatII.ViewModels
             }
 
             // CombinedItem 에 추가된 PracticeItemList 생성
-            newItem.PracticeItemList = MarkPracticeItemList();
+            newItem.PracticeItemList = MakePracticeItemList();
 
             HistoryDatabase database = await HistoryDatabase.Instance;
             await database.SaveCommbinedItemAsync(newItem);
@@ -199,16 +178,19 @@ namespace HealthBeatII.ViewModels
             if (!answer)
                 return;
 
-            listSelectedPractice.Add(PracticeItems[iSelectedIdx]);
+            listSelectedPractice.Add(m_listPractice[iSelectedIdx]);
+
+            OnAppearing();
+            //await ExecuteLoadItemsCommand();
         }
 
-        private string MarkPracticeItemList()
+        private string MakePracticeItemList()
         {
             string strList = "";
 
             for (int i = 0; i < listSelectedPractice.Count; i++)
             {
-                int Id = GetPracticeItemIndexFromName(listSelectedPractice[i]);
+                int Id = GetPracticeItemIndexFromName(listSelectedPractice[i].Name);
 
                 if (Id != -1)
                 {
@@ -225,7 +207,7 @@ namespace HealthBeatII.ViewModels
             {
                 if (m_listPractice[i].Name.CompareTo(strName) == 0)
                 {
-                    Items.Add(m_listPractice[i]);
+                    //Items.Add(m_listPractice[i]);
                     return m_listPractice[i].Id;
                 }
             }
