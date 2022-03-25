@@ -1,12 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="HealthBeatII.Views.CombinedItemDetailPage">
+             x:Class="HealthBeatII.Views.CombinedItemDetailPage"
+             Shell.PresentationMode="ModalAnimated"
+             Title="Update Combined Practice Item"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:local="clr-namespace:HealthBeatII.ViewModels"  
+             xmlns:model="clr-namespace:HealthBeatII.Models"  
+             ios:Page.UseSafeArea="true">
+
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout Spacing="3" Padding="15">
+            <Label Text="Name" FontSize="Medium" />
+            <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
+            <Label Text="Description" FontSize="Medium" />
+            <Editor Text="{Binding Description, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+            
+            <Label Text="Select Pratice Items" FontSize="Medium" />
+            <Picker 
+                        x:Name="pickerPractice"
+                        ItemsSource="{Binding PracticeItems}"
+                        TitleColor="Red"
+                        SelectedIndexChanged ="pickerPractice_SelectedIndexChanged"
+                        />
+
+            <!-- 
+                선택된 Practice Item 표시. 
+                Picker가 하나 선택될 때마다 업데이트되어야 함.
+                -->
+            <RefreshView x:DataType="local:CombinedItemDetailViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <CollectionView x:Name="SelectedCombinedItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10" x:DataType="model:PracticeItem">
+
+                                <Label Text="{Binding Name}" 
+                                        LineBreakMode="NoWrap" 
+                                        Style="{DynamicResource ListItemTextStyle}" 
+                                        TextColor="RED"
+                                        FontSize="16" />
+
+                                <Label Text="{Binding Description}" 
+                                        LineBreakMode="NoWrap"
+                                        MaxLines="3"
+                                        Style="{DynamicResource ListItemDetailTextStyle}"
+                                        TextColor="BLUE"
+                                        FontSize="13" />
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:CombinedItemDetailViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Update" Command="{Binding UpdateCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Button Text="Delete" Command="{Binding DeleteCommand}" HorizontalOptions="FillAndExpand"></Button>
+            </StackLayout>
+
         </StackLayout>
     </ContentPage.Content>
+
 </ContentPage>

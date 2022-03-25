@@ -65,43 +65,7 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </RefreshView>
-
-            <StackLayout>
-                <!--
-                <Label x:Name="lblTitle" Text="Picker control in Xamarin Forms - UWP and Android Demo" Font="Large" />
-                <Label x:Name="lbldisp"></Label>
-                -->
-
-                <!--
-                기본적인 Picker 는 이렇게.. 리스트 가변적으로 하는 방법은?
-                <Picker x:Name="Countries">
-                    <Picker.Items>
-                        <x:String>India</x:String>
-                        <x:String>United States</x:String>
-                        <x:String>Australia</x:String>
-                        <x:String>Bangladesh</x:String>
-                        <x:String>Canada</x:String>
-                        <x:String>China</x:String>
-                        <x:String>Germany</x:String>
-                        <x:String>Mauritius</x:String>
-                        <x:String>Nepal</x:String>
-                        <x:String>Brazil</x:String>
-                    </Picker.Items>
-                </Picker>
-                
-                <Picker Title="Select a Practice Item"
-                        TitleColor="Red"
-                        ItemsSource="{Binding PracticeItems}"
-                        ItemDisplayBinding="{Binding Name}" />
-                
-                -->
-
-                
-
-            </StackLayout>
-
-            
+            </RefreshView>            
 
 
             <StackLayout Orientation="Horizontal">

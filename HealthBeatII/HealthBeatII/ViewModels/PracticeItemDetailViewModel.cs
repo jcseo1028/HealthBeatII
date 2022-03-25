@@ -6,7 +6,6 @@ using Xamarin.Forms;
 using HealthBeatII.Models;
 using HealthBeatII.Views;
 
-
 namespace HealthBeatII.ViewModels
 {
     [QueryProperty(nameof(ItemId), nameof(ItemId))]

@@ -91,8 +91,8 @@ namespace HealthBeatII.ViewModels
 
             // This will push the ItemDetailPage onto the navigation stack
 
-            // ViewModel 추가 필요. CombinedItemDetailViewModel
-            await Shell.Current.GoToAsync($"{nameof(CombinedItemDetailViewModel)}?{nameof(CombinedItemDetailViewModel.ItemId)}={item.Id.ToString()}");
+            // Page -> ViewModel 순서로...
+            await Shell.Current.GoToAsync($"{nameof(CombinedItemDetailPage)}?{nameof(CombinedItemDetailViewModel.ItemId)}={item.Id.ToString()}");
 
         }
     }
