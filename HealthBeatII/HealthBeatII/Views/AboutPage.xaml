@@ -91,8 +91,8 @@
                        FontSize="44"/>
                 <Label x:Name="LabelCombined"
                        HorizontalOptions="Center"
-                       TextColor="NavajoWhite"
-                       FontSize="44"/>
+                       TextColor="Orange"
+                       FontSize="30"/>
             </StackLayout>
         </ScrollView>
     </Grid>

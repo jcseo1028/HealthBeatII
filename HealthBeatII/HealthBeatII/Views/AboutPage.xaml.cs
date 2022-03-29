@@ -50,8 +50,6 @@ namespace HealthBeatII.Views
 
         protected override void OnAppearing()
         {
-            //_vewModel.OnAppearing();
-
             base.OnAppearing();
         }
 
@@ -89,9 +87,6 @@ namespace HealthBeatII.Views
 
                 pickerCombined.Items.Add(strPickerItem);
             }
-
-            //pickerCombined.SelectedIndex = 0;
-            //await database.SaveItemAsync(historyitem);
         }
 
         private PracticeItem GetPracticeItemById(int nID)
@@ -108,11 +103,15 @@ namespace HealthBeatII.Views
         {
             if ((sender as Button).Text == "Start")
             {
+                // Item 이 선택되어 있지 않으면 시작 금지.
+                if (m_iSelectedCombinedIndex == -1)
+                {
+                    DisplayAlert("확인", "Item 을 선택해 주세요.", "확인");
+                    return;
+                }
+
                 dt_Start = DateTime.Now;
                 m_bStartMode = true;
-
-                // Combined Item 선택 상자 표시 및 선택값 가져오기.
-                //m_iSelectedCombinedIndex = -1;
 
                 StartOperation();
 
@@ -130,13 +129,6 @@ namespace HealthBeatII.Views
 
         async void SaveHistory()
         {
-            //var historyItem = (TodoItem)BindingContext;
-
-            if(m_iSelectedCombinedIndex == -1)
-            {
-                return;
-            }    
-
             HistoryItem historyitem = new HistoryItem();
 
             historyitem.BPM = m_iBPM;
@@ -149,12 +141,7 @@ namespace HealthBeatII.Views
 
             await database.SaveItemAsync(historyitem);
 
-            //RefreshView 를 이용해야 할 듯함.
-            //LoadData();
-            //await Navigation.PopAsync();
-
             pickerCombined.Items.Clear();
-
             _vewModel.OnAppearing();
         }
 
