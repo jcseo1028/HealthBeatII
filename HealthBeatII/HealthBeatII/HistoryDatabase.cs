@@ -113,5 +113,10 @@ namespace HealthBeatII
         {
             return Database.DeleteAsync(item);
         }
+
+        public Task<int> DeleteHistoryItemAsync(HistoryItem item)
+        {
+            return Database.DeleteAsync(item);
+        }
     }
 }
