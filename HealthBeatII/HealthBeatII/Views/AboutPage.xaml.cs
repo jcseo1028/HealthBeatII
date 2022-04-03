@@ -135,7 +135,9 @@ namespace HealthBeatII.Views
             historyitem.StartTime = dt_Start.ToString("yyyyMMddHHmmss");
             historyitem.EndTime = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            historyitem.CombinedItemId = m_iSelectedCombinedIndex;
+            string[] strs = pickerCombined.SelectedItem.ToString().Split('(');
+
+            historyitem.CombinedItemId = GetCombinedItemByName(strs[0].Trim());
 
             HistoryDatabase database = await HistoryDatabase.Instance;
 
@@ -143,6 +145,17 @@ namespace HealthBeatII.Views
 
             pickerCombined.Items.Clear();
             _vewModel.OnAppearing();
+        }
+
+        private int GetCombinedItemByName(string strName)
+        {
+            foreach(var itemCombined in m_listCombinedItem)
+            {
+                if (itemCombined.Name.CompareTo(strName) == 0)
+                    return itemCombined.Id;
+            }
+
+            return -1;
         }
 
         private void StartOperation()
