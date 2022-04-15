@@ -84,6 +84,7 @@ namespace HealthBeatII.ViewModels
                         strPickerItem += itemTemp.Name + ", ";
                     }
                 }
+                strPickerItem = strPickerItem.Substring(0, strPickerItem.Length - 2);
                 strPickerItem += " )";
 
                 pickerCombined.Items.Add(strPickerItem);

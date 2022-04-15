@@ -83,6 +83,7 @@ namespace HealthBeatII.Views
                         strPickerItem += itemTemp.Name + ", ";
                     }
                 }
+                strPickerItem = strPickerItem.Substring(0, strPickerItem.Length - 2);
                 strPickerItem += " )";
 
                 pickerCombined.Items.Add(strPickerItem);
