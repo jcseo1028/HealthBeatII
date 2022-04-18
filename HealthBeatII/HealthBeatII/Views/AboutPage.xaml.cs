@@ -166,6 +166,11 @@ namespace HealthBeatII.Views
 
             int ibpm = (int)((60.0 * 1000) / m_iBPM);
 
+            // 타이머 이렇게 쓰는 게 맞는건가? 
+            // BPM 시간이 일정하지 않은 거 같음. 
+            // Xamarin 카페에 문의해보자!! 
+            // async method??
+              
             //Device.StartTimer(TimeSpan.FromSeconds(1), () =>
             Device.StartTimer(TimeSpan.FromMilliseconds(ibpm), () =>
             {
