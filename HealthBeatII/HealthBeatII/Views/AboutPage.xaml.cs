@@ -105,7 +105,7 @@ namespace HealthBeatII.Views
             if ((sender as Button).Text == "Start")
             {
                 // Item 이 선택되어 있지 않으면 시작 금지.
-                if (m_iSelectedCombinedIndex == -1)
+                if (m_iSelectedCombinedIndex == -1 || pickerCombined.Items.Count <= 0)
                 {
                     DisplayAlert("확인", "Item 을 선택해 주세요.", "확인");
                     return;
@@ -117,6 +117,7 @@ namespace HealthBeatII.Views
                 StartOperation();
 
                 (sender as Button).Text = "Stop";
+                buttonReset.IsVisible = false;
             }
             else
             {
@@ -125,6 +126,15 @@ namespace HealthBeatII.Views
                 LabelTime.Text = string.Format("{0:D2} : {1:D2} . {2:D2}", m_ts.Minutes, m_ts.Seconds, m_ts.Milliseconds / 10);
                 m_bStartMode = false;
                 SaveHistory();
+
+                // Label 을 클릭하면 초기화하거나, 별도 Reset 버튼 추가가 필요함.
+                // 한번 저장 후 Picker Item 목록 사라짐.
+                // 그대로 재시작 시 프로그램 튕김.
+
+                // 한번 종료되면 Reset Button 이 보이도록 수정.
+                buttonReset.IsVisible = true;
+                pickerCombined.Items.Clear();                
+
             }
         }
 
@@ -226,6 +236,39 @@ namespace HealthBeatII.Views
             m_iSelectedCombinedIndex = pickerCombined.SelectedIndex;
 
             LabelCombined.Text = pickerCombined.SelectedItem.ToString();
+        }
+
+        private void resetButton_Clicked(object sender, EventArgs e)
+        {
+            if ((sender as Button).Text == "Reset")
+            {
+                pickerCombined.Items.Clear();
+
+                foreach (var itemCombined in m_listCombinedItem)
+                {
+                    string strPickerItem = "";
+                    strPickerItem += itemCombined.Name;
+                    strPickerItem += " ( ";
+                    string[] strs = itemCombined.PracticeItemList.Split(',');
+                    for (int i = 0; i < strs.Length - 1; i++)
+                    {
+                        int nId = Convert.ToInt32(strs[i]);
+                        PracticeItem itemTemp = GetPracticeItemById(nId);
+
+                        if (itemTemp != null)
+                        {
+                            strPickerItem += itemTemp.Name + ", ";
+                        }
+                    }
+                    strPickerItem = strPickerItem.Substring(0, strPickerItem.Length - 2);
+                    strPickerItem += " )";
+
+                    pickerCombined.Items.Add(strPickerItem);
+                }
+            }
+
+            LabelTime.Text = string.Format("{0:D2} : {1:D2} . {2:D2}", 0, 0, 0);
+            LabelCombined.Text = "";
         }
     }
 }

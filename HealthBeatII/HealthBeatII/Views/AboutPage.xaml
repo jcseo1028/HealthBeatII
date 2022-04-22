@@ -96,6 +96,17 @@
                        HorizontalOptions="Center"
                        TextColor="Orange"
                        FontSize="30"/>
+                <Button 
+                        x:Name="buttonReset"
+                        Margin="0,10,0,0" Text="Reset"
+                        Clicked="resetButton_Clicked"
+                        BackgroundColor="{StaticResource Primary}"
+                        BorderRadius="10"
+                        BorderColor="NavajoWhite"
+                        BorderWidth="5"
+                        TextColor="NavajoWhite" 
+                        FontSize="40"
+                        IsVisible="False"/>
             </StackLayout>
         </ScrollView>
     </Grid>
